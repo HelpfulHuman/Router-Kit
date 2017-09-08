@@ -44,7 +44,7 @@ export function createContext (history, location, state) {
     query: parseQuery(location.search),
     params: {},
     state: state,
-    // location: location,
+    location: location,
     history: history,
   });
 }
@@ -124,15 +124,15 @@ export function parseQuery (query) {
 export function onPathMatch (path, handler, exact) {
   isType("path", "string", path);
   isType("handler", "function", handler);
-  return function (ctx, dispatch) {
+  return function (context, dispatch) {
     // Attempt to match and parse the parameters based on the path
-    var params = parseParams(path, ctx.uri);
+    var params = parseParams(path, context.uri);
     // Skip the handler if the params are null
     if (params !== null) {
       // Update the context object with the params
-      ctx = Object.assign(ctx, { params });
+      context = Object.assign({}, context, { params });
       // Run the given handler with the updated context
-      handler(ctx, dispatch);
+      handler(context, dispatch);
     }
   };
 }
