@@ -55,17 +55,25 @@ export function createContext (history, location, state) {
  *
  * @param  {Function[]} middleware
  * @param  {Object} context
+ * @param  {Function} done
  */
-export function runMiddleware (middleware, context) {
+export function runMiddleware (middleware, context, done) {
+  // Copy the middleware to our own array we can safely .shift()
   var mw = middleware.slice(0);
-  const callNext = function () {
+
+  const callNext = function (err) {
+    // Find the next middleware to call in the stack (if any)
     var next = mw.shift();
-    if (!next) return;
-    try {
-      return Promise.resolve(next(context, callNext));
-    } catch (err) {
-      return Promise.reject(err);
+    // Attempt to invoke the next middleware
+    if (!err && next) {
+      try {
+        return next(context, callNext);
+      } catch (_err) {
+        err = _err;
+      }
     }
+    // If we've reached this point, then we can quit
+    done(err);
   }
   callNext();
 }
@@ -130,7 +138,7 @@ export function onPathMatch (path, handler, exact) {
     // Skip the handler if the params are null
     if (params !== null) {
       // Update the context object with the params
-      context = Object.assign({}, context, { params });
+      context = Object.assign(context, { params });
       // Run the given handler with the updated context
       handler(context, dispatch);
     }
