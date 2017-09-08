@@ -1,10 +1,10 @@
 import buble from "rollup-plugin-buble";
 
 export default {
-  entry: "src/index.js",
-  targets: [
-    { dest: 'dist/index.js', format: 'cjs' },
-    { dest: 'dist/index.es.js', format: 'es' },
+  input: "src/index.js",
+  output: [
+    { file: "dist/index.js", format: "cjs" },
+    { file: "dist/index.es.js", format: "es" },
   ],
   plugins: [ buble() ],
   onwarn (message) {
