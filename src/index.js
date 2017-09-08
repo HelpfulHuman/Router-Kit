@@ -3,7 +3,7 @@ import pathToRegex from "path-to-regexp";
 /**
  * No operation function.
  */
-export function noop () {}
+function noop () {}
 
 /**
  * Throws an error if the given value does not match the given type.
@@ -12,7 +12,7 @@ export function noop () {}
  * @param  {String} type
  * @param  {*} val
  */
-export function isType (name, type, val) {
+function isType (name, type, val) {
   var valType = (Array.isArray(val) ? "array" : typeof val);
   if (valType !== type) {
     throw new Error(`Bad argument: "${name}" must be of type "${type}", but "${valType}" was given instead.`);
@@ -24,7 +24,7 @@ export function isType (name, type, val) {
  *
  * @param  {Object} history
  */
-export function isHistory (history) {
+function isHistory (history) {
   isType("history", "object", history);
   isType("history.listen", "function", history.listen);
 }
