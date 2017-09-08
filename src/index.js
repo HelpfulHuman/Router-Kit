@@ -54,22 +54,20 @@ export function createContext (history, location, state) {
  * given context object.
  *
  * @param  {Function[]} middleware
- * @return {Function}
+ * @param  {Object} context
  */
-export function runMiddleware (middleware) {
-  return function (ctx) {
-    var mw = middleware.slice(0);
-    const callNext = function () {
-      var next = mw.shift();
-      if (!next) return;
-      try {
-        return Promise.resolve(next(context, callNext));
-      } catch (err) {
-        return Promise.reject(err);
-      }
+export function runMiddleware (middleware, context) {
+  var mw = middleware.slice(0);
+  const callNext = function () {
+    var next = mw.shift();
+    if (!next) return;
+    try {
+      return Promise.resolve(next(context, callNext));
+    } catch (err) {
+      return Promise.reject(err);
     }
-    callNext();
   }
+  callNext();
 }
 
 /**
