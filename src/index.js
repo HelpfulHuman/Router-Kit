@@ -69,6 +69,21 @@ export function runMiddleware (middleware, context, done) {
 }
 
 /**
+ * Compose multiple middleware into a single middleware method.
+ *
+ * @param  {Function[]} middleware
+ * @return {Function}
+ */
+export function compose (...middleware) {
+  // Flatten all given middleware into a single array
+  middleware = Array.prototype.concat.apply(middleware);
+  // Return a new function for running our composed middleware
+  return function (context, next) {
+    runMiddleware(middleware, context, next);
+  }
+}
+
+/**
  * Returns a params object containing the parsed tokens from the path if the
  * URI matches the path's pattern.  Otherwise, null is returned.
  *
