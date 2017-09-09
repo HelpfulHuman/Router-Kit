@@ -1,4 +1,5 @@
 import pathToRegex from "path-to-regexp";
+import flatten from "arr-flatten";
 
 /**
  * No operation function.
@@ -87,7 +88,7 @@ export function runMiddleware (middleware, context, done) {
  */
 export function compose (...middleware) {
   // Flatten all given middleware into a single array
-  middleware = Array.prototype.concat.apply(middleware);
+  middleware = flatten(middleware);
   // Assert that all given values are functions
   assertEach("middleware", "function", middleware);
   // Return a new function for running our composed middleware
