@@ -20,16 +20,6 @@ function isType (name, type, val) {
 }
 
 /**
- * Throws an error if object shape is not that of a history object.
- *
- * @param  {Object} history
- */
-function isHistory (history) {
-  isType("history", "object", history);
-  isType("history.listen", "function", history.listen);
-}
-
-/**
  * Create a new route context using a location object and any state that the
  * user would like to pass along.
  *
@@ -89,13 +79,13 @@ export function runMiddleware (middleware, context, done) {
  */
 export function parseParams (path, uri, exact) {
   var arg, key, keys = [], params = {};
-  var args = pathToRegex(path, { end: !exact }, keys).exec(uri);
+  var args = pathToRegex(path, keys, { end: exact }).exec(uri);
   if (args) {
     args = args.slice(1);
     for (var i = 0; i < args.length; i++) {
       key = keys[i].name;
       arg = args[i];
-      params[key] = (arg ? decodeURIComponent(arg) : arg);
+      params[key] = (arg ? decodeURIComponent(arg) : null);
     }
     return params;
   }
