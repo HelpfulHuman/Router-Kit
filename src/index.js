@@ -6,17 +6,33 @@ import pathToRegex from "path-to-regexp";
 function noop () {}
 
 /**
- * Throws an error if the given value does not match the given type.
+ * Throws an error if the given value does not match the given type(s).
  *
  * @param  {String} name
- * @param  {String} type
+ * @param  {String[]} type
  * @param  {*} val
  */
-function isType (name, type, val) {
+export function assertType (name, type, val) {
+  var types = [].concat(type);
   var valType = (Array.isArray(val) ? "array" : typeof val);
-  if (valType !== type) {
-    throw new Error(`Bad argument: "${name}" must be of type "${type}", but "${valType}" was given instead.`);
+  if (types.indexOf(valType) !== -1) {
+    var typeStr = (types.length > 1 ? types.join("\" or \"") : types[0]);
+    throw new Error(`Bad argument: "${name}" must be of type "${typeStr}", but "${valType}" was given instead.`);
   }
+}
+
+/**
+ * Throws an error if any of the values in the given array don't match
+ * the given type(s).
+ *
+ * @param  {String} name
+ * @param  {String[]} type
+ * @param  {Array<any>} val
+ */
+export function assertEach (name, type, val) {
+  val.forEach(function (v) {
+    assertType(name, type, v);
+  });
 }
 
 /**
@@ -77,6 +93,8 @@ export function runMiddleware (middleware, context, done) {
 export function compose (...middleware) {
   // Flatten all given middleware into a single array
   middleware = Array.prototype.concat.apply(middleware);
+  // Assert that all given values are functions
+  assertEach("middleware", "function", middleware);
   // Return a new function for running our composed middleware
   return function (context, next) {
     runMiddleware(middleware, context, next);
@@ -135,8 +153,8 @@ export function parseQuery (query) {
  * @return {Function}
  */
 export function onPathMatch (path, handler, exact) {
-  isType("path", "string", path);
-  isType("handler", "function", handler);
+  assertType("path", "string", path);
+  assertType("handler", "function", handler);
   return function (context, dispatch) {
     // Attempt to match and parse the parameters based on the path
     var params = parseParams(path, context.uri);
