@@ -156,7 +156,7 @@ export function onPathMatch (path, handler, exact) {
     // Skip the handler if the params are null
     if (params !== null) {
       // Update the context object with the params
-      context = Object.assign(context, { params });
+      context = Object.assign({}, context, { params });
       // Run the given handler with the updated context
       handler(context, dispatch);
     }
