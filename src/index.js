@@ -36,23 +36,18 @@ export function assertEach (name, type, val) {
 }
 
 /**
- * Create a new route context using a location object and any state that the
- * user would like to pass along.
+ * Create a new route context using a location object.
  *
- * @param  {Object} history
  * @param  {Object} location
- * @param  {Object} state
  * @return {Object}
  */
-export function createContext (history, location, state) {
-  return Object.assign({}, location, {
+export function createContext (location) {
+  return {
     uri: location.pathname,
     query: parseQuery(location.search),
     params: {},
-    state: state,
     location: location,
-    history: history,
-  });
+  };
 }
 
 /**
