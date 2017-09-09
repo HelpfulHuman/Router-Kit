@@ -15,7 +15,7 @@ function noop () {}
 export function assertType (name, type, val) {
   var types = [].concat(type);
   var valType = (Array.isArray(val) ? "array" : typeof val);
-  if (types.indexOf(valType) !== -1) {
+  if (types.indexOf(valType) === -1) {
     var typeStr = (types.length > 1 ? types.join("\" or \"") : types[0]);
     throw new Error(`Bad argument: "${name}" must be of type "${typeStr}", but "${valType}" was given instead.`);
   }
