@@ -150,7 +150,7 @@ export function parseQuery (query) {
 export function onPathMatch (path, handler, exact) {
   assertType("path", "string", path);
   assertType("handler", "function", handler);
-  return function (context, dispatch) {
+  return function (context, next) {
     // Attempt to match and parse the parameters based on the path
     var params = parseParams(path, context.uri);
     // Skip the handler if the params are null
@@ -158,7 +158,9 @@ export function onPathMatch (path, handler, exact) {
       // Update the context object with the params
       context = Object.assign(context, { params });
       // Run the given handler with the updated context
-      handler(context, dispatch);
+      handler(context, next);
+    } else {
+      next();
     }
   };
 }
