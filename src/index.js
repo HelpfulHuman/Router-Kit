@@ -91,6 +91,8 @@ export function compose (...middleware) {
   middleware = flatten(middleware);
   // Assert that all given values are functions
   assertEach("middleware", "function", middleware);
+  // If only one middleware is provided, just return it
+  if (middleware.length === 1) return middleware[0];
   // Return a new function for running our composed middleware
   return function (context, next) {
     runMiddleware(middleware, context, next);
