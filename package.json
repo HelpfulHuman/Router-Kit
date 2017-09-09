@@ -1,6 +1,6 @@
 {
   "name": "@helpfulhuman/router-kit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple library for building custom frontend routing solutions for single page applications.",
   "main": "dist/index.js",
   "jsnext:main": "dist/index.es.js",
