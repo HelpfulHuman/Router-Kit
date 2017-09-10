@@ -67,7 +67,7 @@ export function runMiddleware (middleware, context, done) {
     // Find the next middleware to call in the stack (if any)
     var next = mw.shift();
     // Attempt to invoke the next middleware
-    if (!err && next) {
+    if (arguments.length === 0 && next) {
       try {
         return next(context, callNext);
       } catch (_err) {
@@ -75,7 +75,7 @@ export function runMiddleware (middleware, context, done) {
       }
     }
     // If we've reached this point, then we can quit
-    done(err);
+    done.apply(null, arguments);
   }
   callNext();
 }
