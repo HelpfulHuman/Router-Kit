@@ -63,15 +63,15 @@ export function runMiddleware (middleware, context, done) {
   // Copy the middleware to our own array we can safely .shift()
   var mw = middleware.slice(0);
 
-  const callNext = function (err) {
+  const callNext = function () {
     // Find the next middleware to call in the stack (if any)
     var next = mw.shift();
     // Attempt to invoke the next middleware
     if (arguments.length === 0 && next) {
       try {
         return next(context, callNext);
-      } catch (_err) {
-        err = _err;
+      } catch (err) {
+        return done(err);
       }
     }
     // If we've reached this point, then we can quit
