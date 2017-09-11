@@ -26,13 +26,13 @@ export default class Router {
   }
 
   /**
-   * Creates the URI for a set alias or returns null if the alias isn't set.
+   * Creates the URI for a set alias or returns the given path if no alias could be found.
    *
    * @param  {String} path
    * @param  {Object} params
    * @return {String}
    */
-  buildUri (path, params) {
+  buildUri (path, params = {}) {
     var alias = aliases[path];
     return (!!alias ? alias(params) : path);
   }

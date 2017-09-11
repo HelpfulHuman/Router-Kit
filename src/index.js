@@ -1,7 +1,5 @@
 import Router from "./router";
 import {
-  assertType,
-  assertEach,
   createContext,
   runMiddleware,
   compose,
@@ -11,8 +9,6 @@ import {
 } from "./utils";
 
 export {
-  assertType,
-  assertEach,
   createContext,
   runMiddleware,
   compose,
