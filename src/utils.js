@@ -96,9 +96,7 @@ export function runMiddleware (middleware, context, done) {
  * @param  {Function[]} middleware
  * @return {Function}
  */
-export function compose (...middleware) {
-  // Flatten all given middleware into a single array
-  middleware = flatten(middleware);
+export function compose (middleware) {
   // Assert that all given values are functions
   assertEach("middleware", "function", middleware);
   // If only one middleware is provided, just return it

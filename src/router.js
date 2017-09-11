@@ -1,6 +1,6 @@
 import flatten from "arr-flatten";
 import pathToRegex from "path-to-regexp";
-import { compose, onPathMatch, assertType, runMiddleware, defaultErrorHandler } from "./utils";
+import { compose, convertMiddleware, onPathMatch, assertType } from "./utils";
 
 export default class Router {
 
@@ -9,9 +9,8 @@ export default class Router {
    * and managing routing middleware.
    */
   constructor () {
-    this.stack        = [];
-    this.aliases      = {};
-    this.errorHandler = defaultErrorHandler;
+    this.stack   = [];
+    this.aliases = {};
   }
 
   /**
@@ -35,7 +34,7 @@ export default class Router {
    */
   buildUri (path, params) {
     var alias = aliases[path];
-    return (!!alias ? alias(params) : null);
+    return (!!alias ? alias(params) : path);
   }
 
   /**
@@ -49,7 +48,7 @@ export default class Router {
     if (typeof path === "function") {
       this.stack = flatten([this.stack, path, middlewares]);
     } else {
-      this.stack.push(onPathMatch(path, compose(middlewares), false));
+      this.stack.push(onPathMatch(path, compose(flatten(middlewares)), false));
     }
     return this;
   }
@@ -65,19 +64,7 @@ export default class Router {
     if (middlewares.length === 0) {
       throw new Error("Bad argument: At least one middleware must be given to router.exact()");
     }
-    this.stack.push(onPathMatch(path, compose(middlewares), true));
-    return this;
-  }
-
-  /**
-   * Replace the default error handler with a custom one.
-   *
-   * @param  {Function} handler
-   * @return {Router}
-   */
-  catch (handler) {
-    assertType("handler", "function", handler);
-    this.errorHandler = handler;
+    this.stack.push(onPathMatch(path, compose(flatten(middlewares)), true));
     return this;
   }
 
@@ -85,11 +72,10 @@ export default class Router {
    * Returns a new middleware function that will run through the middleware
    * stack of this router.
    *
-   * @param  {Object} context
-   * @param  {Function} done
+   * @param  {Function} run
    */
-  middleware (context, done) {
-    return runMiddleware.bind(null, this.stack);
+  middleware () {
+    return compose(flatten(this.stack));
   }
 
 }
