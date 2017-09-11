@@ -7,6 +7,16 @@ import flatten from "arr-flatten";
 function noop () {}
 
 /**
+ * Default error handler for dealing with unhandled errors.
+ *
+ * @param {Error} err
+ * @param {Object} ctx
+ */
+export function defaultErrorHandler (err, ctx) {
+  console.error(`Route Error: ${ctx.uri} resulted in "${err.message}"`, err);
+}
+
+/**
  * Throws an error if the given value does not match the given type(s).
  *
  * @param  {String} name
@@ -63,13 +73,11 @@ export function runMiddleware (middleware, context, done) {
   // Copy the middleware to our own array we can safely .shift()
   var mw = middleware.slice(0);
 
-  const callNext = function (...args) {
-    // Filter falsey values
-    var argCount = args.filter(item => !!item).length;
+  const callNext = function () {
     // Find the next middleware to call in the stack (if any)
     var next = mw.shift();
     // Attempt to invoke the next middleware
-    if (argCount === 0 && next) {
+    if (arguments.length === 0 && next) {
       try {
         return next(context, callNext);
       } catch (err) {
