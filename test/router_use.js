@@ -4,7 +4,7 @@ const { Router } = require("../");
 
 function noop () {}
 
-describe("Router.use()", function () {
+describe("Router.use", function () {
 
   var router;
   beforeEach(function () {
