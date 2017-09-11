@@ -44,11 +44,6 @@ export default function connectHistory (router, history, handler) {
   // ensure that the given history object is a history object
   assertHistoryType(history);
 
-  // make sure that a valid router instance is provided
-  if (router instanceof Router) {
-    throw new Error("Bad argument: The router argument must be an instance of Router");
-  }
-
   // create the default handler if none was provided
   if (typeof handler !== "function") {
     handler = createDefaultHandler(history);
