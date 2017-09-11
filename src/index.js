@@ -1,4 +1,5 @@
 import Router from "./router";
+import connectHistory from "./connectHistory";
 import {
   createContext,
   runMiddleware,
@@ -15,5 +16,6 @@ export {
   parseParams,
   parseQuery,
   onPathMatch,
-  Router
+  Router,
+  connectHistory
 }
