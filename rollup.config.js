@@ -6,7 +6,10 @@ export default {
     { file: "dist/index.js", format: "cjs" },
     { file: "dist/index.es.js", format: "es" },
   ],
-  external: ["arr-flatten"],
+  external: [
+    "arr-flatten",
+    "path-to-regexp",
+  ],
   plugins: [ buble() ],
   onwarn (message) {
     if (/external dependency/.test(message)) return;

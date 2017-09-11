@@ -1,6 +1,6 @@
 import flatten from "arr-flatten";
 import pathToRegex from "path-to-regexp";
-import { compose, convertMiddleware, onPathMatch, assertType } from "./utils";
+import { compose, onPathMatch, assertType } from "./utils";
 
 export default class Router {
 

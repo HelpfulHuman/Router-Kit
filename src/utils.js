@@ -7,16 +7,6 @@ import flatten from "arr-flatten";
 function noop () {}
 
 /**
- * Default error handler for dealing with unhandled errors.
- *
- * @param {Error} err
- * @param {Object} ctx
- */
-export function defaultErrorHandler (err, ctx) {
-  console.error(`Route Error: ${ctx.uri} resulted in "${err.message}"`, err);
-}
-
-/**
  * Throws an error if the given value does not match the given type(s).
  *
  * @param  {String} name
