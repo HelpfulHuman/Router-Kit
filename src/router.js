@@ -9,7 +9,7 @@ export default class Router {
    * and managing routing middleware.
    */
   constructor () {
-    this.middleware   = [];
+    this.stack        = [];
     this.aliases      = {};
     this.errorHandler = defaultErrorHandler;
   }
@@ -47,9 +47,9 @@ export default class Router {
    */
   use (path, ...middlewares) {
     if (typeof path === "function") {
-      this.middleware = flatten([this.middleware, path, middlewares]);
+      this.stack = flatten([this.stack, path, middlewares]);
     } else {
-      this.middleware.push(onPathMatch(path, compose(middlewares), false));
+      this.stack.push(onPathMatch(path, compose(middlewares), false));
     }
     return this;
   }
@@ -65,7 +65,7 @@ export default class Router {
     if (middlewares.length === 0) {
       throw new Error("Bad argument: At least one middleware must be given to router.exact()");
     }
-    this.middleware.push(onPathMatch(path, compose(middlewares), true));
+    this.stack.push(onPathMatch(path, compose(middlewares), true));
     return this;
   }
 
@@ -89,7 +89,7 @@ export default class Router {
    * @param  {Function} done
    */
   middleware (context, done) {
-    return runMiddleware.bind(null, this.middleware);
+    return runMiddleware.bind(null, this.stack);
   }
 
 }
