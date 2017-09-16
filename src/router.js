@@ -33,7 +33,7 @@ export default class Router {
    * @return {String}
    */
   buildUri (path, params = {}) {
-    var alias = aliases[path];
+    var alias = this.aliases[path];
     return (!!alias ? alias(params) : path);
   }
 
