@@ -23,7 +23,17 @@ describe("runMiddleware", function () {
     });
     runMiddleware([mw, mw, mw], {}, function (err) {
       assert.isUndefined(err);
-      assert.isTrue(mw.callCount === 3);
+      assert.equal(mw.callCount, 3);
+      done();
+    });
+  });
+
+  it("runs each middleware when the previous middleware invokes the callback with any falsey arguments", function (done) {
+    var mw = sinon.spy(function (context, next) {
+      next(null, null);
+    });
+    runMiddleware([mw, mw, mw], {}, function (err, redirect) {
+      assert.equal(mw.callCount, 3);
       done();
     });
   });
@@ -34,8 +44,8 @@ describe("runMiddleware", function () {
       throw err;
     });
     runMiddleware([mw, mw], {}, function (_err) {
-      assert.isTrue(_err === err);
-      assert.isTrue(mw.calledOnce);
+      assert.equal(_err, err);
+      assert.equal(mw.callCount, 1);
       done();
     });
   });
@@ -46,8 +56,8 @@ describe("runMiddleware", function () {
       next(err);
     });
     runMiddleware([mw, mw], {}, function (_err) {
-      assert.isTrue(_err === err);
-      assert.isTrue(mw.calledOnce);
+      assert.equal(_err, err);
+      assert.equal(mw.callCount, 1);
       done();
     });
   });

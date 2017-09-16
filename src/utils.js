@@ -52,6 +52,21 @@ export function createContext (location) {
 }
 
 /**
+ * Returns true if any of the given arguments are not falsey.
+ *
+ * @param  {Array} arr
+ * @return {Bool}
+ */
+function hasNonFalseyValues (arr) {
+  for (var i = 0; i < arr.length; i++) {
+    if (!!arr[i]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * Returns a function that runs through a list of middleware using a
  * given context object.
  *
@@ -67,7 +82,7 @@ export function runMiddleware (middleware, context, done) {
     // Find the next middleware to call in the stack (if any)
     var next = mw.shift();
     // Attempt to invoke the next middleware
-    if (arguments.length === 0 && next) {
+    if (!hasNonFalseyValues(arguments) && next) {
       try {
         return next(context, callNext);
       } catch (err) {
